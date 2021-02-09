@@ -218,7 +218,7 @@ if ($install) {
             myFlush();
         }
         if ($error)
-            echo "<div>Some errors encountered</div>";
+            //echo "<div>Some errors encountered</div>";
         $error = false;
 
         $sql = base64_decode($db['contents']);
@@ -229,13 +229,13 @@ if ($install) {
         for ($i = 0; $i < count($query); $i++) {
             if (!mysqli_query($dbc, $query[$i])) {
                 $error = true;
-                echo ' - <font color="red">ERROR</font> ' . mysqli_error($dbc) . " <div class=\"error\">" . $query[$i] . "</div>";
+                //echo ' - <font color="red">ERROR</font> ' . mysqli_error($dbc) . " <div class=\"error\">" . $query[$i] . "</div>";
             }
-            echo "</div>";
+            //echo "</div>";
             myFlush();
         }
         if ($error)
-            echo "<div>Some errors encountered</div>";
+            //echo "<div>Some errors encountered</div>";
 
         mysqli_close($dbc);
         $db_installed = true;
@@ -304,7 +304,7 @@ if ($install) {
             <div>
                 <input type="checkbox" name="install" id="install"> <label for="install">Confirm installation.</label>
             </div>
-            <div><button>INSTALLATION</button></div>
+            <div><button>INSTALL</button></div>
         </form>
     </div>
     <br/>
