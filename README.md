@@ -1,4 +1,3 @@
 # nts-programs
 To clone run this command:
-
-git clone --recurse-submodules https://github.com/nts-dev/nts-programs.git
+`git clone --recurse-submodules https://github.com/nts-dev/nts-programs.git`
