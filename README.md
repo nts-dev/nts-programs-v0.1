@@ -19,15 +19,15 @@ Go to your terminal window and login to mysql
 
 Create the database
 
-`CREATE DATABASE databasename;`
+`CREATE DATABASE 'databasename';`
 
 Create user if does not exist
 
-`CREATE USER databaseuser@localhost IDENTIFED BY yourpassword;`
+`CREATE USER 'databaseuser'@'localhost' IDENTIFED BY 'yourpassword';`
 
 Grant access to user
 
-`GRANT ALL ON databasename.* TO databaseuser@localhost;`
+`GRANT ALL ON 'databasename'.* TO 'databaseuser'@localhost;`
 
 ### Run the application
 
