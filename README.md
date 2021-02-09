@@ -5,7 +5,7 @@
 - PHP
 - Mysql Server
 
-## Installation
+## Set up application
 
 Open a new terminal window and navigate to the server root and clone the programs run the follwing command:
 
@@ -25,7 +25,7 @@ Create user if does not exist
 Grant access to user
 > GRANT ALL ON `databasename`.* TO `databaseuser`@`localhost`;
 
-Run the application
+### Run the application
 
 Open browser and type http://`yourhostname`/nts-programs eg `http://localhost/nts-programs`
 
