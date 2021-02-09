@@ -36,7 +36,7 @@ $language = $_SESSION['contact_language_id'];
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Projects Program</title>
+    <title>NTS Programs</title>
     <!-- <link rel="shortcut icon" href="Views/imgs/laptop_settings-512.png"  type="image/x-icon" > -->
     <script src="dhtmlxsuite4/codebase/dhtmlx.js"></script>
     <link rel="stylesheet" type="text/css" href="dhtmlxsuite4/codebase/dhtmlx.css"/>
@@ -86,7 +86,7 @@ $language = $_SESSION['contact_language_id'];
             // by the default "def" view used, when layout is loaded
             // this view also loaded, so just init
 
-            myLayout.cells("a").attachURL("http://" + location.host + "/main/projects/index.php?eid=<?= $eid ?>");
+            myLayout.cells("a").attachURL("<?= $NTS_CFG->wwwroot ?>/nts-project/index.php?eid=<?= $eid ?>");
         }
 
         function showView(id) {
@@ -97,11 +97,11 @@ $language = $_SESSION['contact_language_id'];
             if (firstShow) {
 
                 if (id == "videos") {
-                    myLayout.cells("a").attachURL("http://" + location.host + "/main/videos/home.php?eid=<?= $eid ?>");
+                    myLayout.cells("a").attachURL("<?= $NTS_CFG->wwwroot ?>/nts-video/home.php?eid=<?= $eid ?>");
                 }
 
                 if (id == "doc_extract") {
-                    myLayout.cells("a").attachURL("http://" + location.host + "/main/doc_extract/?eid=<?= $eid ?>");
+                    myLayout.cells("a").attachURL("<?= $NTS_CFG->wwwroot ?>/docs-extract/?eid=<?= $eid ?>");
                 }
             }
         }
