@@ -7,7 +7,8 @@
 
 ## Installation
 
-Open a new terminal window and navigate to the server root and clone the programs run the follwing command :
+Open a new terminal window and navigate to the server root and clone the programs run the follwing command:
+
 `git clone --recurse-submodules https://github.com/nts-dev/nts-programs.git`
 
 ### Set up the application database
@@ -25,6 +26,7 @@ Grant access to user
 > GRANT ALL ON `databasename`.* TO `databaseuser`@`localhost`;
 
 Run the application
+
 Open browser and type http://`yourhostname`/nts-programs eg `http://localhost/nts-programs`
 
 Provide the necessary settings and click install
