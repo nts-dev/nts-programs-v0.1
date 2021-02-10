@@ -138,12 +138,14 @@ ob_start();
 
 $GLOBALS['HTTP_VARS'] = $_GET + $_POST;
 
-function get($key) {
+function get($key)
+{
     if (isset($GLOBALS['HTTP_VARS'][$key]))
         return $GLOBALS['HTTP_VARS'][$key];
 }
 
-function byte($size) {
+function byte($size)
+{
     $unim = array("B", "KB", "MB", "GB", "TB", "PB");
     $i = 0;
     while ($size >= 1024) {
@@ -153,7 +155,8 @@ function byte($size) {
     return number_format($size, ($i ? 2 : 0), ",", ".") . " " . $unim[$i];
 }
 
-function myFlush() {
+function myFlush()
+{
     ob_end_flush();
     ob_flush();
     flush();
@@ -161,9 +164,13 @@ function myFlush() {
 }
 
 if (get('dump') && isset($db)) {
+
+    $structure = base64_decode($db['structure']);
+    $structure = gzuncompress($structure);
+
     $sql = base64_decode($db['contents']);
     $sql = gzuncompress($sql);
-    echo "Dump database <b>{$db['database']}</b><br/></br><textarea style=\"width:100%;padding:10px;\" rows=\"30\">$sql</textarea>";
+    echo "Dump database <b>{$db['database']}</b><br/></br><textarea style=\"width:100%;padding:10px;\" rows=\"30\">$structure\n$sql</textarea>";
     exit;
 }
 
@@ -189,13 +196,19 @@ if ($install) {
         $db_password = get('db_password');
         $db_database = get('db_database');
 
-        $dbc = mysqli_connect($db_hostname, $db_username, $db_password, $db_database);
+        $dbc = mysqli_connect($db_hostname, $db_username, $db_password);
 
         // Check connection
         if (mysqli_connect_errno()) {
             echo "Failed to connect to MySQL: " . mysqli_connect_error();
             exit();
         }
+
+        // create database if not exist
+        mysqli_query($dbc, "CREATE DATABASE IF NOT EXISTS {$db_database}") or die(mysqli_error($dbc));
+
+        // Change db to provided db
+        mysqli_select_db($dbc, $db_database) or die(mysqli_error($dbc));
 
         $db_installed = false;
         $error = false;
@@ -209,16 +222,18 @@ if ($install) {
         for ($i = 0; $i < count($query); $i++) {
             list($table, $rows) = each($db['table_list']);
             echo "<div>$table ($rows rows)";
-            if (!mysqli_query($dbc, $query[$i])) {
-                $error = true;
-                echo ' - <font color="red">ERROR</font>' . mysqli_error($dbc);
-            } else
-                echo " - OK";
+            if ($query[$i]) {
+                if (!mysqli_query($dbc, $query[$i])) {
+                    $error = true;
+                    echo ' - <font color="red">ERROR</font>' . mysqli_error($dbc);
+                } else
+                    echo " - OK";
+            }
             echo "</div>";
             myFlush();
         }
         if ($error)
-            //echo "<div>Some errors encountered</div>";
+            echo "<div>Some errors encountered</div>";
         $error = false;
 
         $sql = base64_decode($db['contents']);
@@ -227,15 +242,17 @@ if ($install) {
 
         echo "<br/><br/><hr><h3>DATABASE: INSERT CONTENT</h3>";
         for ($i = 0; $i < count($query); $i++) {
-            if (!mysqli_query($dbc, $query[$i])) {
-                $error = true;
-                //echo ' - <font color="red">ERROR</font> ' . mysqli_error($dbc) . " <div class=\"error\">" . $query[$i] . "</div>";
+            if ($query[$i]) {
+                if (!mysqli_query($dbc, $query[$i])) {
+                    $error = true;
+                    echo ' - <font color="red">ERROR</font> ' . mysqli_error($dbc) . " <div class=\"error\">" . $query[$i] . "</div>";
+                }
             }
-            //echo "</div>";
+            echo "</div>";
             myFlush();
         }
         if ($error)
-            //echo "<div>Some errors encountered</div>";
+            echo "<div>Some errors encountered</div>";
 
         mysqli_close($dbc);
         $db_installed = true;
