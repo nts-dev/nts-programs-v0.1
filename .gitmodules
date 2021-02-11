@@ -1,9 +1,0 @@
-[submodule "nts-project"]
-	path = nts-project
-	url = https://github.com/nts-dev/nts-project.git
-[submodule "nts-video"]
-	path = nts-video
-	url = https://github.com/nts-dev/nts-video.git
-[submodule "docs-extract"]
-	path = docs-extract
-	url = https://github.com/nts-dev/docs-extract.git
