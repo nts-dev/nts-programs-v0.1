@@ -16,6 +16,7 @@ Open a new terminal window and navigate to the server root and clone the program
 Open a new terminal window and navigate to the server root and run the follwing commands:
 
 `git pull --recurse-submodules`
+
 `git submodule foreach git merge origin main`
 
 ### Set up the application database
