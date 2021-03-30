@@ -1,94 +1,78 @@
+<?php
+
+use session\auth\AuthenticationServiceImpl;
+
+include('nts-video/api/session/Commons.php');
+
+$service = new AuthenticationServiceImpl();
+
+$username = $password = "";
+$username_err = $password_err = $login_err = "";
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+
+    $userId = $_POST["trainee"];
+    // Validate username
+    if (empty(trim($_POST["trainee"])))
+        $username_err = "Please enter a username.";
+    elseif (empty(trim($_POST["identifier"])))
+        $password_err = "Please enter a password.";
+    else {
+        $authenticated = $service->authenticateClient(
+            filter_input(INPUT_POST, 'trainee', FILTER_SANITIZE_NUMBER_INT),
+            filter_input(INPUT_POST, 'identifier', FILTER_SANITIZE_STRING)
+        );
+        if ($authenticated)
+            header("location: index.php?eid=" . $userId);
+
+        else
+            $login_err = "Error";
+    }
+}
+
+?>
+
+
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>NTS Programs</title>
-    <link rel="shortcut icon" href="Views/imgs/laptop_settings-512.png" type="image/x-icon">
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
-    <link rel="stylesheet" type="text/css" href="dhtmlxsuite4/codebase/dhtmlx.css"/>
-    <link rel="stylesheet" type="text/css" href="dhtmlxsuite4/skins/terrace/dhtmlx.css"/>
-    <script src="dhtmlxsuite4/codebase/dhtmlx.js"></script>
+    <meta charset="UTF-8">
+    <title>Sign Up</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
-        html, body {
-            background-color: #f5f5f5;
+        body {
+            font: 14px sans-serif;
         }
 
-        iframe.submit_iframe {
-            position: absolute;
-            width: 1px;
-            height: 1px;
-            left: -100px;
-            top: -100px;
-            font-size: 1px;
-        }
-
-        div.login_form {
-            position: relative;
-            margin-top: 200px;
-            margin-left: auto;
-            margin-right: auto;
-            height: 205px;
-            width: 300px;
-            box-shadow: 0px 0px 8px rgba(127, 127, 127, 0.4);
-            border: 1px solid #c0c0c0;
-            border-radius: 2px;
-            background-color: white;
+        .wrapper {
+            width: 350px;
+            padding: 20px;
         }
     </style>
-    <script>
-
-        var myForm, formData;
-
-        function doOnLoad() {
-
-            formData = [
-                {type: "settings", position: "label-left", labelWidth: 75, inputWidth: 150},
-                {
-                    type: "block", blockOffset: 30, offsetTop: 15, width: "auto", list: [
-                        {type: "label", label: "Please Login", labelWidth: "auto", offsetLeft: 35},
-                        {type: "input", label: "Login", name: "dhxform_demo_login", value: "", offsetTop: 20},
-                        {type: "password", label: "Password", name: "dhxform_demo_pwd", value: ""},
-                        {type: "button", name: "submit", value: "Log In", offsetTop: 20, offsetLeft: 72}
-                    ]
-                }
-            ];
-
-            myForm = new dhtmlXForm("dhxForm", formData);
-
-            myForm.attachEvent("onButtonClick", function (name) {
-
-                // submit real form when user clicks Submit button on a dhtmlx form
-                if (name == "submit") {
-                    document.getElementById("realForm").submit();
-                }
-            });
-            document.onkeypress = enterPressed;
-
-            function enterPressed(evn) {
-                if (window.event && window.event.keyCode == 13) {
-                    document.getElementById("realForm").submit();
-                } else if (evn && evn.keyCode == 13) {
-                    document.getElementById("realForm").submit();
-                }
-            }
-        }
-
-        function submitCallback(status, eid) {
-            if (status === 1) {
-                document.location.href = "index.php?eid=" + eid;
-            } else {
-                // reset form
-                myForm.setFormData({dhxform_demo_login: "", dhxform_demo_pwd: ""});
-            }
-        }
-    </script>
 </head>
-<body onload="doOnLoad();">
-<div class="login_form">
-    <form id="realForm" action="check.php" method="POST" target="submit_ifr">
-        <div id="dhxForm"></div>
+<body>
+<div class="wrapper col-xl-5 col-lg-6 col-md-8 col-sm-10 mx-auto text-center form p-4">
+    <h2>Sign In</h2>
+    <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
+        <div class="form-group text-left">
+            <label>Username</label>
+            <input type="text" name="trainee"
+                   class="form-control <?php echo (!empty($username_err)) ? 'is-invalid' : ''; ?>"
+                   value="<?php echo $username; ?>">
+            <span class="invalid-feedback"><?php echo $username_err; ?></span>
+        </div>
+        <div class="form-group text-left">
+            <label>Password</label>
+            <input type="password" name="identifier"
+                   class="form-control <?php echo (!empty($password_err)) ? 'is-invalid' : ''; ?>"
+                   value="<?php echo $password; ?>">
+            <span class="invalid-feedback"><?php echo $password_err; ?></span>
+        </div>
+        <div class="form-group">
+            <input type="submit" class="btn btn-primary" value="Submit">
+            <span class="invalid-feedback"><?php echo $login_err; ?></span>
+        </div>
     </form>
 </div>
-<iframe border="0" frameBorder="0" name="submit_ifr" class="submit_iframe"></iframe>
 </body>
 </html>
